@@ -41,12 +41,21 @@ http = {
 	GetAsync = function(url)
 		return http_get(url)
 	end;
+	PutAsync = function(url)
+		return http_put(url)
+	end;
+	DeleteAsync = function(url)
+		return http_delete(url)
+	end;
+	OptionsAsync = function(url)
+		return http_options(url)
+	end;
 	PostAsync = function(url,body)
 		return http_post(url,body)
 	end;
 	PostAsyncA = function(url,body)
 		local data = ""
-		for k, v in pairs(dataFields) do
+		for k, v in pairs(body) do
 			data = data .. ("&%s=%s"):format(
 				UrlEncode(k),
 				UrlEncode(v)

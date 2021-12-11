@@ -27,8 +27,9 @@ function tick(dt)
 	if testingMode then
 		if c >= 60*1.25 then
 			c = 0
-			-- http.PostAsyncA("http://localhost/",{msg = "hello"},cb)
-			local resp = http.GetAsync("http://localhost/hi.txt")
+			 local resp = http.GetAsync("http://localhost/hi.txt")
+			-- local resp = http.PostAsyncA("http://localhost/test.php",{hi = "Hello"})
+			-- local resp = http.PutAsync("http://localhost/test.php")
 			if resp.Success then
 				DebugPrint(resp.Body)
 			else
