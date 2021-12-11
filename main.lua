@@ -1,6 +1,6 @@
 #include "mhttp.lua"
 
-local testingMode = true
+local testingMode = false
 
 local loaded = false
 local showTicks = 60*1.5
@@ -28,8 +28,12 @@ function tick(dt)
 		if c >= 60*1.25 then
 			c = 0
 			-- http.PostAsyncA("http://localhost/",{msg = "hello"},cb)
-			local body = http.GetAsync("http://localhost/hi.txt")
-			DebugPrint(body)
+			local resp = http.GetAsync("http://localhost/hi.txt")
+			if resp.Success then
+				DebugPrint(resp.Body)
+			else
+				DebugPrint("MTHTP_ERROR: " .. resp.Error)
+			end
 		else
 			c = c + 1
 		end

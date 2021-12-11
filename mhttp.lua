@@ -12,10 +12,10 @@ local body = http.PostAsyncA("http://localhost/",{msg = "hello"}) -- PostAsyncA 
 "mhttp.lua"
 --------------------------
 http = {
-	GetAsync = function(<url:string>) -> <body:string>
-	PostAsyncA = function(<url:string>,<data:table>) -> <body:string>
+	GetAsync = function(<url:string>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
+	PostAsyncA = function(<url:string>,<data:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
 	
-	PostAsync = function(<url:string>,<data:string>) -> <body:string>
+	PostAsync = function(<url:string>,<data:string>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
 		
 	UrlEncode = function(<str:string>) -> <output:string>
 	UrlDecode = function(<str:string>) -> <output:string>
