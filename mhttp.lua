@@ -1,6 +1,8 @@
 --[[
 Malte0621's ExternalHttp Module (V2).
 
+(Requires json.lua)
+
 --> Usage
 #include "mhttp.lua"
 
@@ -12,14 +14,14 @@ local body = http.PostAsyncA("http://localhost/",{msg = "hello"}) -- PostAsyncA 
 "mhttp.lua"
 --------------------------
 http = {
-	GetAsync = function(<url:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
-	PostAsyncA = function(<url:string>,<data:table>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
+	GetAsync = function(<url:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, Headers = <headers:table>, StatusCode = <statuscode:int>}
+	PostAsyncA = function(<url:string>,<data:table>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, Headers = <headers:table>, StatusCode = <statuscode:int>}
 	
-	PutAsync = function(<url:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
-	DeleteAsync = function(<url:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
-	OptionsAsync = function(<url:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
+	PutAsync = function(<url:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, Headers = <headers:table>, StatusCode = <statuscode:int>}
+	DeleteAsync = function(<url:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, Headers = <headers:table>, StatusCode = <statuscode:int>}
+	OptionsAsync = function(<url:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, Headers = <headers:table>, StatusCode = <statuscode:int>}
 
-	PostAsync = function(<url:string>,<data:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, StatusCode = <statuscode:int>}
+	PostAsync = function(<url:string>,<data:string>,<headers:table>) -> {Success = <success:bool>, (Error = <error:string>), Body = <body:string>, Headers = <headers:table>, StatusCode = <statuscode:int>}
 	
 	UrlEncode = function(<str:string>) -> <output:string>
 	UrlDecode = function(<str:string>) -> <output:string>
@@ -29,6 +31,8 @@ http = {
 {["key"] = "value"}
 --------------------------
 ]]
+
+#include "json.lua"
 
 local UrlEncode = function(str)
 	str = string.gsub (str, "([^0-9a-zA-Z !'()*._~-])",
@@ -52,33 +56,38 @@ local function formatHeaders(headers)
 	return tmp
 end
 
+local function parseResponse(resp)
+	resp["Headers"] = json.decode(resp["Headers"])
+	return resp
+end
+
 http = {
 	UrlEncode = UrlEncode;
 	UrlDecode = UrlDecode;
 	GetAsync = function(url,headers)
 		if not headers then headers = {} end
 		headers = formatHeaders(headers)
-		return http_get(url,unpack(headers))
+		return parseResponse(http_get(url,unpack(headers)))
 	end;
 	PutAsync = function(url,headers)
 		if not headers then headers = {} end
 		headers = formatHeaders(headers)
-		return http_put(url,unpack(headers))
+		return parseResponse(http_put(url,unpack(headers)))
 	end;
 	DeleteAsync = function(url,headers)
 		if not headers then headers = {} end
 		headers = formatHeaders(headers)
-		return http_delete(url,unpack(headers))
+		return parseResponse(http_delete(url,unpack(headers)))
 	end;
 	OptionsAsync = function(url,headers)
 		if not headers then headers = {} end
 		headers = formatHeaders(headers)
-		return http_options(url,unpack(headers))
+		return parseResponse(http_options(url,unpack(headers)))
 	end;
 	PostAsync = function(url,body,headers)
 		if not headers then headers = {} end
 		headers = formatHeaders(headers)
-		return http_post(url,body,unpack(headers))
+		return parseResponse(http_post(url,body,unpack(headers)))
 	end;
 	PostAsyncA = function(url,body,headers)
 		if not headers then headers = {} end
@@ -91,6 +100,6 @@ http = {
 			)
 		end
 		data = data:sub(2)
-		return http_post(url,data,unpack(headers))
+		return parseResponse(http_post(url,data,unpack(headers)))
 	end;
 }

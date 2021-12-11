@@ -28,6 +28,9 @@ function tick(dt)
 			-- local resp = http.PutAsync("http://localhost/test.php")
 			if resp.Success then
 				DebugPrint(resp.Body)
+				for i,v in pairs(resp.Headers) do
+					DebugPrint(i .. ", " .. v)
+				end
 			else
 				DebugPrint("MTHTP_ERROR: " .. resp.Error)
 			end
