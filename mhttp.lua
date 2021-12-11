@@ -57,7 +57,9 @@ local function formatHeaders(headers)
 end
 
 local function parseResponse(resp)
-	resp["Headers"] = json.decode(resp["Headers"])
+	if resp["Headers"] then
+		resp["Headers"] = json.decode(resp["Headers"])
+	end
 	return resp
 end
 
