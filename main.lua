@@ -5,8 +5,6 @@ local testingMode = false
 local loaded = false
 local showTicks = 60*1.5
 
-local debugMode = true
-
 function init()
 	loaded = true
 end
@@ -19,15 +17,13 @@ function Split(s, delimiter)
     return result;
 end
 
-local text = ""
-
 local c = 0
 
 function tick(dt)
 	if testingMode then
 		if c >= 60*1.25 then
 			c = 0
-			 local resp = http.GetAsync("http://localhost/hi.txt")
+			 local resp = http.GetAsync("http://localhost/hi.txt",{["Test-Header"] = "Test"})
 			-- local resp = http.PostAsyncA("http://localhost/test.php",{hi = "Hello"})
 			-- local resp = http.PutAsync("http://localhost/test.php")
 			if resp.Success then
