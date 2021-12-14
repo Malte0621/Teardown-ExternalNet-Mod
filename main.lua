@@ -1,7 +1,7 @@
 #include "mhttp.lua"
 #include "mudp.lua"
 
-local testingMode = true
+local testingMode = false
 local doHttpTest = false
 local doUDPTest = false
 local isUDPServer = false
