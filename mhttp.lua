@@ -1,13 +1,14 @@
 --[[
 Malte0621's ExternalHttp Module (V2).
+(coroutine.wrap(function() end) is helpful to prevent crashes during the request.)
 
 (Requires json.lua)
 
 --> Usage
 #include "mhttp.lua"
 
-local body = http.PostAsyncA("http://localhost/",{msg = "hello"}) -- PostAsyncA urlencodes for you. While PostAsync does not and requires manual urlencoding. 
--- local body = http.GetAsync("http://localhost/")	
+local resp = http.PostAsyncA("http://localhost/",{msg = "hello"}) -- PostAsyncA urlencodes for you. While PostAsync does not and requires manual urlencoding. 
+-- local resp = http.GetAsync("http://localhost/")	
 
 --> API
 --------------------------

@@ -1,6 +1,10 @@
 #include "mhttp.lua"
+#include "mudp.lua"
 
-local testingMode = false
+local testingMode = true
+local doHttpTest = false
+local doUDPTest = false
+local isUDPServer = false
 
 local loaded = false
 local showTicks = 60*1.5
@@ -9,30 +13,71 @@ function init()
 	loaded = true
 end
 
-function Split(s, delimiter)
-    result = {};
-    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
-        table.insert(result, match);
-    end
-    return result;
-end
-
 local c = 0
 
-function tick(dt)
+local udpSocket = nil
+
+local udpServerSocket = nil
+
+function update(dt)
 	if testingMode then
-		if c >= 60*1.25 then
-			c = 0
-			 local resp = http.GetAsync("http://localhost/hi.txt",{["Test-Header"] = "Test"})
-			-- local resp = http.PostAsyncA("http://localhost/test.php",{hi = "Hello"})
-			-- local resp = http.PutAsync("http://localhost/test.php")
-			if resp.Success then
-				DebugPrint(resp.Body)
-				for i,v in pairs(resp.Headers) do
-					DebugPrint(i .. ", " .. v)
+		if c == 25 then
+			c = c + 1
+			if isUDPServer then
+				if not udpServerSocket then
+					udpServerSocket = udp.host(1621)
 				end
-			else
-				DebugPrint("MTHTP_ERROR: " .. resp.Error)
+				if udpServerSocket then
+					pcall(function()
+						local data = udpServerSocket.recv(1024)
+						DebugPrint('--------- Server ---------')
+						DebugPrint(data.addr.str)
+						DebugPrint(data.data)
+						DebugPrint('--------------------------')
+						local s,f = pcall(function()
+							udpServerSocket.send(data.addr.ip,data.addr.port,"Hello Server")
+						end)
+						if s then
+							DebugPrint('SENT RESPONSE')
+						else
+							DebugPrint('I FAILED TO SEND MY RESPONSE! :(  :  ' .. f)
+						end
+					end)
+				end
+			end
+		elseif c >= 60*1.25 then
+			c = 0
+			
+			-- HTTP
+			if doHttpTest then
+				local resp = http.GetAsync("http://localhost/hi.txt",{["Test-Header"] = "Test"})
+				-- local resp = http.PostAsyncA("http://localhost/test.php",{hi = "Hello"})
+				-- local resp = http.PutAsync("http://localhost/test.php")
+				if resp.Success then
+					DebugPrint(resp.Body)
+					for i,v in pairs(resp.Headers) do
+						DebugPrint(i .. ", " .. v)
+					end
+				else
+					DebugPrint("MTHTP_ERROR: " .. resp.Error)
+				end
+			end
+			-- UDP
+			if doUDPTest then
+				if not isUDPServer then
+					if not udpSocket then
+						udpSocket = udp.connect("127.0.0.1",1621)
+						DebugPrint("Connected")
+					end
+					if udpSocket then
+						DebugPrint('--------- Client ---------')
+						local sent = udpSocket.send("Hello Client")
+						DebugPrint(sent and "true" or "false")
+						local data = udpSocket.recv(1024)
+						DebugPrint(data)
+						DebugPrint('--------------------------')
+					end
+				end
 			end
 		else
 			c = c + 1
@@ -49,3 +94,4 @@ function draw()
 		showTicks = showTicks - 1
 	end
 end
+
