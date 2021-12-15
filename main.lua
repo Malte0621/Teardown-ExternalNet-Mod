@@ -5,6 +5,7 @@ local testingMode = false
 local doHttpTest = false
 local doUDPTest = false
 local isUDPServer = false
+local doTestEvery = 0.5  -- Seconds
 
 local loaded = false
 local showTicks = 60*1.5
@@ -45,7 +46,7 @@ function update(dt)
 					end)
 				end
 			end
-		elseif c >= 60*1.25 then
+		elseif c >= 60*doTestEvery then
 			c = 0
 			
 			-- HTTP
