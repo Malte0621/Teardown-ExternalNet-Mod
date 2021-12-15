@@ -64,6 +64,12 @@ local function parseResponse(resp)
 	return resp
 end
 
+local http_get = http_get
+local http_put = http_put
+local http_delete = http_delete
+local http_options = http_options
+local http_post = http_post
+
 http = {
 	UrlEncode = UrlEncode;
 	UrlDecode = UrlDecode;

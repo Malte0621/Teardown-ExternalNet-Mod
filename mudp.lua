@@ -56,6 +56,13 @@ local function parseResponse(resp)
 	return resp
 end
 
+local udp_host = udp_host
+local udp_unhost = udp_unhost
+local udp_send = udp_send
+local udp_recv = udp_recv
+local udp_connect = udp_connect
+local udp_close = udp_close
+
 udp = {
 	host = function(port)
 		local resp = udp_host(port)

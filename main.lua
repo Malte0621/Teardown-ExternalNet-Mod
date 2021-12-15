@@ -5,6 +5,8 @@ local testingMode = false
 local doHttpTest = false
 local doUDPTest = false
 local isUDPServer = false
+local doPingtest = false
+local onlyResolveDuringPing = false
 local doTestEvery = 0.5  -- Seconds
 
 local loaded = false
@@ -77,6 +79,28 @@ function update(dt)
 						local data = udpSocket.recv(1024)
 						DebugPrint(data)
 						DebugPrint('--------------------------')
+					end
+				end
+			end
+			-- PING
+			if doPingtest then
+				if onlyResolveDuringPing then
+					local resp = resolve("www.google.com")
+					if resp.Success then
+						DebugPrint(resp.IP)
+					end
+				else
+					local resp = ping("www.google.com")
+					if resp.Success then
+						if resp.Timeout then
+							DebugPrint('Ping2Google: Timeout')
+							DebugPrint('Resolved Google Ip Address: ' .. resp.IP)
+						else
+							DebugPrint('Ping2Google: ' .. resp.Time)
+							DebugPrint('Resolved Google Ip Address: ' .. resp.IP)
+						end
+					else
+						DebugPrint('MPING_ERROR: ' .. resp.Error)
 					end
 				end
 			end
