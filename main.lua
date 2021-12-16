@@ -1,6 +1,26 @@
 #include "mhttp.lua"
 #include "mudp.lua"
+#include "version.lua"
 
+local installed_version = version
+
+local checkForUpdates = true
+if checkForUpdates then
+	local s,f = pcall(function()
+		local latestVersion = http.GetAsync("https://raw.githubusercontent.com/Malte0621/Teardown-ExternalNet-Mod/main/version.lua")
+		if latestVersion.Success then
+			loadstring(latestVersion.Body)()
+			if installed_version ~= version then
+				DebugPrint("[ExternalNet]: Updates availible, check github repo.")
+			end
+		else
+			DebugPrint("[ExternalNet]: Failed to fetch latest version of ExternalNet.")
+		end
+	end)
+	if not s then
+		DebugPrint("[ExternalNet]: Failed to fetch latest version of ExternalNet. {Error: \"" .. f .. "\"}")
+	end
+end
 local testingMode = false
 local doHttpTest = false
 local doUDPTest = false
