@@ -24,7 +24,7 @@ if checkForUpdates then
 end
 local testingMode = false
 local doHttpTest = false
-local doUDPTest = true
+local doUDPTest = false
 local isUDPServer = false
 local doPingtest = false
 local onlyResolveDuringPing = false
