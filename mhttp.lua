@@ -1,6 +1,6 @@
 --[[
 Malte0621's ExternalHttp Module (V2).
-(coroutine.wrap(function() end) is helpful to prevent crashes during the request.)
+(coroutine.wrap(function() end) is also helpful to prevent crashes during the request.)
 
 (Requires json.lua)
 

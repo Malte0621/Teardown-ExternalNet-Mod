@@ -1,5 +1,6 @@
 #include "mhttp.lua"
 #include "mudp.lua"
+#include "msteam.lua"
 #include "version.lua"
 
 local installed_version = version
@@ -27,6 +28,7 @@ local doUDPTest = false
 local isUDPServer = false
 local doPingtest = false
 local onlyResolveDuringPing = false
+local doSteamTest = false
 local doTestEvery = 0.5  -- Seconds
 -- mhttp_return_headers = false -- Disable response headers (may prevent crashing.)
 
@@ -35,6 +37,20 @@ local showTicks = 60*1.5
 
 function init()
 	loaded = true
+	if testingMode and doSteamTest then		
+		local started = steam.Start()
+		if started then
+			local userid = steam.GetId()
+			local username = steam.GetUsername()
+			DebugPrint('---------------- Steam ----------------')
+			DebugPrint('UserID: ' .. tostring(userid))
+			DebugPrint('Username: ' .. username)
+			DebugPrint('---------------------------------------')
+			-- steam.Shutdown() -- Calling this will close the game .-.
+		else
+			DebugPrint('Failed to start SteamApi.')
+		end
+	end
 end
 
 local c = 0
