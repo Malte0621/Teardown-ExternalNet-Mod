@@ -4,6 +4,13 @@ Malte0621's ExternalHttp Module (V2).
 
 (Requires json.lua)
 
+--> Note
+The game crashes when too many requests are sent WITH response headers enabled.
+To disable response headers use:
+mhttp_return_headers = false
+AND To enable it again use:
+mhttp_return_headers = true
+
 --> Usage
 #include "mhttp.lua"
 
@@ -33,7 +40,10 @@ http = {
 --------------------------
 ]]
 
+
 #include "json.lua"
+
+mhttp_return_headers = true
 
 local UrlEncode = function(str)
 	str = string.gsub (str, "([^0-9a-zA-Z !'()*._~-])",

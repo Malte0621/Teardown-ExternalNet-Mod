@@ -1,3 +1,4 @@
 name = ExternalNet
 author = Malte0621
 description = A prototype http requesting & udp communication mod for teardown.
+[noupload]

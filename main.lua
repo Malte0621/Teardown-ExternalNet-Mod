@@ -10,7 +10,7 @@ if checkForUpdates then
 		local latestVersion = http.GetAsync("https://raw.githubusercontent.com/Malte0621/Teardown-ExternalNet-Mod/main/version.lua")
 		if latestVersion.Success then
 			loadstring(latestVersion.Body)()
-			if installed_version ~= version then
+			if installed_version ~= version or get_externalnet_version() ~= version then
 				DebugPrint("[ExternalNet]: Updates availible, check github repo.")
 			end
 		else
@@ -28,6 +28,7 @@ local isUDPServer = false
 local doPingtest = false
 local onlyResolveDuringPing = false
 local doTestEvery = 0.5  -- Seconds
+-- mhttp_return_headers = false -- Disable response headers (may prevent crashing.)
 
 local loaded = false
 local showTicks = 60*1.5
@@ -78,8 +79,10 @@ function update(dt)
 				-- local resp = http.PutAsync("http://localhost/test.php")
 				if resp.Success then
 					DebugPrint(resp.Body)
-					for i,v in pairs(resp.Headers) do
-						DebugPrint(i .. ", " .. v)
+					if mhttp_return_headers then
+						for i,v in pairs(resp.Headers) do
+							DebugPrint(i .. ", " .. v)
+						end
 					end
 				else
 					DebugPrint("MTHTP_ERROR: " .. resp.Error)
