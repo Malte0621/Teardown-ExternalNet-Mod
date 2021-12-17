@@ -24,7 +24,7 @@ if checkForUpdates then
 end
 local testingMode = false
 local doHttpTest = false
-local doUDPTest = false
+local doUDPTest = true
 local isUDPServer = false
 local doPingtest = false
 local onlyResolveDuringPing = false
@@ -70,17 +70,19 @@ function update(dt)
 				if udpServerSocket then
 					pcall(function()
 						local data = udpServerSocket.recv(1024)
-						DebugPrint('--------- Server ---------')
-						DebugPrint(data.addr.str)
-						DebugPrint(data.data)
-						DebugPrint('--------------------------')
-						local s,f = pcall(function()
-							udpServerSocket.send(data.addr.ip,data.addr.port,"Hello Server")
-						end)
-						if s then
-							DebugPrint('SENT RESPONSE')
-						else
-							DebugPrint('I FAILED TO SEND MY RESPONSE! :(  :  ' .. f)
+						if data then
+							DebugPrint('--------- Server ---------')
+							DebugPrint(data.addr.str)
+							DebugPrint(data.data)
+							DebugPrint('--------------------------')
+							local s,f = pcall(function()
+								udpServerSocket.send(data.addr.ip,data.addr.port,"Hello Server")
+							end)
+							if s then
+								DebugPrint('SENT RESPONSE')
+							else
+								DebugPrint('I FAILED TO SEND MY RESPONSE! :(  :  ' .. f)
+							end
 						end
 					end)
 				end
