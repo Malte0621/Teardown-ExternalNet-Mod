@@ -16,7 +16,7 @@ end
 --------------------------
 "msteam.lua"
 --------------------------
-http = {
+steam = {
     Start = function() -> <success:bool>
     Shutdown = function() : Calling this will close the game .-.
     GetUsername = function() -> <username:string>
