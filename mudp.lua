@@ -63,6 +63,8 @@ local udp_recv = udp_recv
 local udp_connect = udp_connect
 local udp_close = udp_close
 
+udp_host, udp_unhost, udp_send, udp_recv, udp_connect, udp_close = nil
+
 udp = {
 	host = function(port)
 		local resp = udp_host(port)

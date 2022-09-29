@@ -80,6 +80,8 @@ local http_delete = http_delete
 local http_options = http_options
 local http_post = http_post
 
+http_get, http_put, http_delete, http_options, http_post = nil
+
 http = {
 	UrlEncode = UrlEncode;
 	UrlDecode = UrlDecode;

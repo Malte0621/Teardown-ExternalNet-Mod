@@ -30,6 +30,8 @@ local shutdown_steam_api = shutdown_steam_api
 local get_steam_username = get_steam_username
 local get_steam_id = get_steam_id
 
+start_steam_api, shutdown_steam_api, get_steam_username, get_steam_id = nil
+
 steam = {
     Start = function()
         return start_steam_api()
